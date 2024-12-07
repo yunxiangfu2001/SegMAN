@@ -15,15 +15,30 @@ and Local Attention for Semantic Segmentation]()
 ```shell
 conda create -n segman python=3.10
 conda activate segman
+
+pip install torch==2.1.2 torchvision==0.16.2
 ```
 **Step 2:** Install [MMSegmentation v0.30.0](https://github.com/open-mmlab/mmsegmentation/tree/v0.30.0) by following the [installation guidelines](https://github.com/open-mmlab/mmsegmentation/blob/v0.30.0/docs/en/get_started.md) and prepare segmentation datasets by following [data preparation](https://github.com/open-mmlab/mmsegmentation/blob/v0.30.0/docs/en/dataset_prepare.md).
+The following installation commands works for me:
+```
+pip install -U openmim
+mim install mmcv-full
+cd segmentation
+pip install -v -e .
+```
 
-
+To support torch>=2.1.0, you also need to replace ```Line 75``` of ```/miniconda3/envs/segman/lib/python3.10/site-packages/mmcv/parallel/_functions.py``` with the following:
+```
+if version.parse(torch.__version__) >= version.parse('2.1.0'):
+    streams = [_get_stream(torch.device("cuda", device)) for device in target_gpus]
+else:
+    streams = [_get_stream(device) for device in target_gpus]
+```
 **Step 3:** Install dependencies using the following commands.
 
 To install [Natten](https://github.com/SHI-Labs/NATTEN), you should modify the following with your PyTorch and CUDA versions accordingly.
 ```shell
-pip install natten==0.17.3+torch240cu124 -f https://shi-labs.com/natten/wheels/
+pip install natten==0.17.3+torch210cu121 -f https://shi-labs.com/natten/wheels/
 ```
 
 The [Selective Scan 2D](https://github.com/MzeroMiko/VMamba) can be install with:
