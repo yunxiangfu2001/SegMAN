@@ -3,7 +3,7 @@
 Official Pytorch implementation of [SegMAN: Omni-scale Context Modeling with State Space Models
 and Local Attention for Semantic Segmentation]()
 
-![SegMAN](assets/SegMAN.png)
+![SegMAN](assets/model.png)
 
 ## Main Results
 
