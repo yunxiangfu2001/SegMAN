@@ -52,33 +52,33 @@ pip install -r requirements.txt
 ```
 
 ## Training
-Download the ImageNet-1k pretrained weights [here]() and put them in a folder ```pretrained/```. Navigate to the segmentation directory:
+Download the ImageNet-1k pretrained weights [here](https://drive.google.com/drive/folders/1QYU7nhpe0ddH7bPxI7VH4drc__07uEHs?usp=sharing) and put them in a folder ```pretrained/```. Navigate to the segmentation directory:
 ```shell
 cd segmentation
 ```
-
-Example training script for ```SegMAN-S``` on ```ADE20K```:
+Scripts to reproduce our paper results are provided in ```./scripts```
+Example training script for ```SegMAN-B``` on ```ADE20K```:
 ```shell
 # Single-gpu
-python tools/train.py local_configs/SegMAN/small/segman_s_512x512.ade.160k.py --work-dir outputs/EXP_NAME
+python tools/train.py local_configs/segman/base/segman_b_ade.py --work-dir outputs/EXP_NAME
 
 # Multi-gpu
-bash tools/dist_train.sh local_configs/SegMAN/small/segman_s_512x512.ade.160k.py <GPU_NUM> --work-dir outputs/EXP_NAME
+bash tools/dist_train.sh local_configs/segman/base/segman_b_ade.py <GPU_NUM> --work-dir outputs/EXP_NAME
 ```
 
 ## Evaluation
-Download `trained weights` for segmentation models at [google drive](). Navigate to the segmentation directory:
+Download `trained weights` for segmentation models at [google drive](https://drive.google.com/drive/folders/1C2bmb7KP7mECm9c04NCrUAJQGsEf_bQ4?usp=sharing). Navigate to the segmentation directory:
 ```shell
 cd segmentation
 ```
 
-Example for evaluating ```SegMAN-S``` on ```ADE20K```:
+Example for evaluating ```SegMAN-B``` on ```ADE20K```:
 ```
 # Single-gpu
-python tools/test.py local_configs/SegMAN/small/segman_s_512x512.ade.160k.py /path/to/checkpoint_file
+python tools/test.py local_configs/segman/base/segman_b_ade.py /path/to/checkpoint_file
 
 # Multi-gpu
-bash tools/dist_test.sh local_configs/SegMAN/small/segman_s_512x512.ade.160k.py /path/to/checkpoint_file <GPU_NUM>
+bash tools/dist_test.sh local_configs/segman/base/segman_b_ade.py /path/to/checkpoint_file <GPU_NUM>
 ```
 
 
@@ -99,3 +99,6 @@ bash scripts/train_segman-s.sh
 Our implementation is based on [MMSegmentaion](https://github.com/open-mmlab/mmsegmentation/tree/v0.24.1), [Natten](https://github.com/SHI-Labs/NATTEN), [VMamba](https://github.com/MzeroMiko/VMamba), and [SegFormer](https://github.com/NVlabs/SegFormer). We gratefully thank the authors.
 
 ## Citation
+```
+
+```
