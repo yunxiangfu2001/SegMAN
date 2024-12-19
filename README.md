@@ -1,9 +1,9 @@
 # SegMAN: Omni-scale Context Modeling with State Space Models and Local Attention for Semantic Segmentation
 
 Official Pytorch implementation of [SegMAN: Omni-scale Context Modeling with State Space Models
-and Local Attention for Semantic Segmentation]()
+and Local Attention for Semantic Segmentation](https://arxiv.org/abs/2412.11890)
 
-![SegMAN](assets/SegMAN.png)
+![SegMAN](assets/model.png)
 
 ## Main Results
 
@@ -100,5 +100,10 @@ Our implementation is based on [MMSegmentaion](https://github.com/open-mmlab/mms
 
 ## Citation
 ```
-
+@article{SegMAN,
+      title={SegMAN: Omni-scale Context Modeling with State Space Models and Local Attention for Semantic Segmentation}, 
+      author={Yunxiang Fu and Meng Lou and Yizhou Yu},
+      journal={arXiv preprint arXiv:2402.03302},
+      year={2024}
+}
 ```
