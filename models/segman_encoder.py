@@ -848,7 +848,7 @@ def _cfg(url=None, **kwargs):
 
 @register_model
 def vmamba_former_t_seg(pretrained=None, pretrained_cfg=None, **args):
-    model = SSViT(
+    model = SegMANEncoder(
         embed_dims=[40, 72, 128, 224],
         depths=[2, 2, 4, 2],
         num_heads=[1, 2, 4, 8],
@@ -874,7 +874,7 @@ def vmamba_former_t_seg(pretrained=None, pretrained_cfg=None, **args):
 
 @register_model
 def vmamba_former_t_seg2(pretrained=None, pretrained_cfg=None, **args):
-    model = SSViT(
+    model = SegMANEncoder(
         embed_dims=[32, 64, 144, 224],
         depths=[2, 2, 2, 2],
         num_heads=[1, 2, 4, 8],
@@ -917,7 +917,7 @@ def SegMANEncoder_s(pretrained=None, pretrained_cfg=None, **args):
 
 @register_model
 def SegMANEncoder_b(pretrained=None, pretrained_cfg=None, **args):
-    model = SSViT(
+    model = SegMANEncoder(
         embed_dims=[96, 160, 364, 560],
         depths=[4, 4, 18, 4],
         num_heads=[4, 8, 13, 20],
