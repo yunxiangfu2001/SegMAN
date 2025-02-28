@@ -100,10 +100,10 @@ Our implementation is based on [MMSegmentaion](https://github.com/open-mmlab/mms
 
 ## Citation
 ```
-@article{SegMAN,
-      title={SegMAN: Omni-scale Context Modeling with State Space Models and Local Attention for Semantic Segmentation}, 
-      author={Yunxiang Fu and Meng Lou and Yizhou Yu},
-      journal={arXiv preprint arXiv:2412.11890},
-      year={2024}
+@inproceedings{SegMAN,
+    title={SegMAN: Omni-scale Context Modeling with State Space Models and Local Attention for Semantic Segmentation},
+    author={Yunxiang Fu and Meng Lou and Yizhou Yu},
+    booktitle={IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+    year={2025}
 }
 ```
