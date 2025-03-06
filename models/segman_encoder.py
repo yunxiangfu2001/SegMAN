@@ -20,7 +20,6 @@ from timm.models.layers import DropPath, to_2tuple, trunc_normal_
 from timm.models.registry import register_model
 from fvcore.nn import FlopCountAnalysis, flop_count_str, flop_count, parameter_count
 from natten.flops import qk_2d_rpb_flop, av_2d_flop, add_natten_handle
-from .fused_na_flop import fna_generic_flops
 
 try:
     from csm_triton import CrossScanTriton, CrossMergeTriton
@@ -698,9 +697,11 @@ class SegMANEncoder(nn.Module):
                  layer_init_values=1e-6,
                  norm_layer=LayerNorm2d,
                  drop_rate=0, 
-                 use_checkpoint=[0, 0, 0, 0]):
+                 use_checkpoint=[0, 0, 0, 0],
+                 pretrain_path=None,):
         super().__init__()
 
+        self.pretrained=pretrain_path
         self.num_classes = num_classes
         self.num_layers = len(depths)
         self.embed_dim = embed_dims[0]
@@ -755,6 +756,7 @@ class SegMANEncoder(nn.Module):
         )
 
         self.apply(self._init_weights)
+        self.init_pretrain_weights()
 
     def _init_weights(self, m):
         if isinstance(m, nn.Conv2d):
@@ -774,7 +776,14 @@ class SegMANEncoder(nn.Module):
         elif isinstance(m, nn.BatchNorm2d):
             nn.init.ones_(m.weight)
             nn.init.zeros_(m.bias)
-
+            
+    def init_pretrain_weights(self, pretrained=None):
+        if isinstance(self.pretrained, str):
+            checkpoint = torch.load(self.pretrained, map_location='cpu')
+            state_dict_name = 'state_dict_ema'
+            state_dict = checkpoint[state_dict_name]
+            self.load_state_dict(state_dict, strict=False)
+            print(f"loaded state dict using {state_dict_name} from {self.pretrained}")
 
     @torch.jit.ignore
     def no_weight_decay(self):
@@ -847,52 +856,22 @@ def _cfg(url=None, **kwargs):
 
 
 @register_model
-def vmamba_former_t_seg(pretrained=None, pretrained_cfg=None, **args):
+def SegMANEncoder_t(pretrained=None, pretrained_cfg=None, **args):
     model = SegMANEncoder(
-        embed_dims=[40, 72, 128, 224],
+        embed_dims=[32, 64, 144, 192],
         depths=[2, 2, 4, 2],
         num_heads=[1, 2, 4, 8],
-        window_size=[11, 9, 7, 7],
+        window_size=[11, 9, 9, 7],
         window_dilation=[1, 1, 1, 1],
         mlp_ratios=[4, 4, 3, 3],
-        # drop_path_rate=0.15,
         layerscales=[False, False, False, False],
-        # layer_init_values=1e-5,
         use_rpb=True,
         norm_layer=LayerNorm2d,
+        pretrain_path=pretrained,
         **args,
     )
     model.default_cfg = _cfg()
-    '''
-    Model vmamba_former_t_seg created, param count:3.690874M
-    GFLOPs on ImageNet-1k 224 resoluton: 0.761753232
-    FPS: 54.98680890336802
-
-    acc 72.112
-    '''
     return model
-
-@register_model
-def vmamba_former_t_seg2(pretrained=None, pretrained_cfg=None, **args):
-    model = SegMANEncoder(
-        embed_dims=[32, 64, 144, 224],
-        depths=[2, 2, 2, 2],
-        num_heads=[1, 2, 4, 8],
-        window_size=[11, 9, 7, 7],
-        window_dilation=[1, 1, 1, 1],
-        mlp_ratios=[4, 4, 4, 4],
-        # drop_path_rate=0.15,
-        layerscales=[False, False, False, False],
-        # layer_init_values=1e-5,
-        use_rpb=True,
-        norm_layer=LayerNorm2d,
-        **args,
-    )
-    model.default_cfg = _cfg()
-    '''
-    '''
-    return model
-
 
 @register_model
 def SegMANEncoder_s(pretrained=None, pretrained_cfg=None, **args):
@@ -902,16 +881,14 @@ def SegMANEncoder_s(pretrained=None, pretrained_cfg=None, **args):
         num_heads=[2, 4, 8, 16],
         window_size=[11, 9, 7, 7],
         window_dilation=[1, 1, 1, 1],
+        mlp_ratios=[4, 4, 3.4, 3.4],
         layerscales=[False, False, False, False],
         use_rpb=True,
         norm_layer=LayerNorm2d,
+        pretrain_path=pretrained,
         **args,
     )
     model.default_cfg = _cfg()
-    '''
-    Model vmamba_former_s_seg2 created, param count:25.507582M
-    GFLOPs on ImageNet-1k 224 resoluton: 4.051162056
-    '''
     return model
 
 
@@ -929,6 +906,7 @@ def SegMANEncoder_b(pretrained=None, pretrained_cfg=None, **args):
         layer_init_values=1e-6,
         use_rpb=True,
         norm_layer=LayerNorm2d,
+        pretrain_path=pretrained,
         **args,
     )
     model.default_cfg = _cfg(crop_pct=0.95)
