@@ -21,7 +21,6 @@ mkl-service==2.4.0
 mmcls==0.25.0
 mmcv-full==1.7.2
 mmengine==0.10.5
-MultiScaleDeformableAttention==1.0
 ninja==1.11.1.1
 numpy==1.26.4
 opencv-python-headless==4.10.0.84
