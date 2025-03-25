@@ -160,7 +160,7 @@ if __name__ == '__main__':
         name='mmsegmentation',
         version=get_version(),
         description='Open MMLab Semantic Segmentation Toolbox and Benchmark',
-        long_description=readme(),
+        long_description="",
         long_description_content_type='text/markdown',
         author='MMSegmentation Contributors',
         author_email='openmmlab@gmail.com',
