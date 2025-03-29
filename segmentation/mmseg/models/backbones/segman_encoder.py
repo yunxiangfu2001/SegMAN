@@ -1015,15 +1015,24 @@ class SegMANEncoder(nn.Module):
         if isinstance(self.pretrained, str):
             logger = get_root_logger()
             checkpoint = torch.load(self.pretrained, map_location='cpu')
-
-            if 'ema' in self.pretrained:
+            # if 'ema' in self.pretrained:
+            #     state_dict_name = 'state_dict_ema'
+            # else:
+            #     state_dict_name = 'state_dict'
+            #     # load_checkpoint(self, self.pretrained, map_location='cpu', strict=False, logger=logger)
+            # state_dict = checkpoint[state_dict_name]
+            # self.load_state_dict(state_dict, strict=False)
+            # logger.info(f"loaded state dict using {state_dict_name} from {self.pretrained}")
+            try:
+                state_dict = checkpoint['state_dict_ema']
                 state_dict_name = 'state_dict_ema'
-            else:
+            except:
+                state_dict = checkpoint['state_dict']
                 state_dict_name = 'state_dict'
-                # load_checkpoint(self, self.pretrained, map_location='cpu', strict=False, logger=logger)
-            state_dict = checkpoint[state_dict_name]
-            self.load_state_dict(state_dict, strict=False)
-            logger.info(f"loaded state dict using {state_dict_name} from {self.pretrained}")
+    
+            load_state_dict(self, state_dict)
+            logger.info(f"loaded pretrained weights using {state_dict_name} from {self.pretrained}")
+    
 
     @torch.jit.ignore
     def no_weight_decay(self):
