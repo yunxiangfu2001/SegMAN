@@ -12,6 +12,7 @@ from einops import einsum, rearrange, repeat
 from einops.layers.torch import Rearrange
 from fvcore.nn import FlopCountAnalysis, flop_count_table
 from mmcv.cnn import ConvModule
+from mmcv.runner import load_state_dict
 from natten import NeighborhoodAttention2D, use_fused_na, use_gemm_na
 from natten.functional import na2d, na2d_av, na2d_qk, natten2dav, natten2dqkrpb
 # from timm.models.vision_transformer import _cfg
