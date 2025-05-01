@@ -901,7 +901,6 @@ def SegMANEncoder_b(pretrained=None, pretrained_cfg=None, **args):
         window_size=[11, 9, 7, 7],
         window_dilation=[1, 1, 1, 1],
         mlp_ratios=[4, 4, 3, 3],
-        # drop_path_rate=0.15,
         layerscales=[True, True, True, True],
         layer_init_values=1e-6,
         use_rpb=True,
@@ -913,7 +912,24 @@ def SegMANEncoder_b(pretrained=None, pretrained_cfg=None, **args):
     return model
 
 
-
+@register_model
+def SegMANEncoder_l(pretrained=None, pretrained_cfg=None, **args):
+    model = SegMANEncoder(
+        embed_dims=[96, 192, 432, 640],
+        depths=[4, 4, 28, 4],
+        num_heads=[4, 8, 12, 20],
+        window_size=[11, 9, 7, 7],
+        window_dilation=[1, 1, 1, 1],
+        mlp_ratios=[4, 4, 3, 3],
+        layerscales=[True, True, True, True],
+        layer_init_values=1e-6,
+        use_rpb=True,
+        norm_layer=LayerNorm2d,
+        pretrain_path=pretrained,
+        **args,
+    )
+    model.default_cfg = _cfg(crop_pct=0.95)
+    return model
 
 if __name__ == "__main__":
     
