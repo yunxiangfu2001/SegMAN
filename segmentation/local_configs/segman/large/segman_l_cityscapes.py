@@ -10,15 +10,15 @@ norm_cfg = dict(type='SyncBN', requires_grad=True)
 model = dict(
     type='EncoderDecoder',
     backbone=dict(
-        type='SegMANEncoder_b',
-        pretrained='/path/to/SegMAN_Encoder_b.pth.tar',
+        type='SegMANEncoder_l',
+        pretrained='/path/to/SegMAN_Encoder_l.pth.tar',
         style='pytorch'),
     decode_head=dict(
         type='SegMANDecoder',
-        in_channels=[96, 160, 364, 560],
+        in_channels=[96, 192, 432, 640],
         in_index=[0, 1, 2, 3],
-        channels=180,
-        feat_proj_dim=320,
+        channels=224,
+        feat_proj_dim=432,
         dropout_ratio=0.1,
         num_classes=19,
         norm_cfg=norm_cfg,
@@ -26,7 +26,7 @@ model = dict(
         loss_decode=dict(type='CrossEntropyLoss', use_sigmoid=False, loss_weight=1.0)),
     # model training and testing settings
     train_cfg=dict(),
-    test_cfg=dict(mode='slide', crop_size=(1024,1024), stride=(768,768)))
+    test_cfg=dict(mode='whole'))
 
 
 # optimizer

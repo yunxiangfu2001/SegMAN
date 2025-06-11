@@ -7,7 +7,9 @@ and Local Attention for Semantic Segmentation](https://arxiv.org/abs/2412.11890)
 
 ## Main Results
 
-<img src="assets/main_results.png" width="50%" />
+<img src="assets/SegMAN_performance.png" width="90%" />
+
+<img src="assets/SegMAN_semantic_segmentation_performance.png" width="90%" />
 
 ## Installation and data preparation
 
@@ -80,6 +82,30 @@ python tools/test.py local_configs/segman/base/segman_b_ade.py /path/to/checkpoi
 # Multi-gpu
 bash tools/dist_test.sh local_configs/segman/base/segman_b_ade.py /path/to/checkpoint_file <GPU_NUM>
 ```
+
+### ADE20K
+
+|   Model  |    Backbone(ImageNet-1k Top1 Acc)     | mIoU | Params | FLOPs  | Config | Download  |
+|  SegMAN-T  |     SegMAN Encoder-T   | 43.0 | 6.4M | 6.2G | [config](segmentation\local_configs\segman\tiny\segman_t_ade.py)  | [Google Drive](https://drive.google.com/file/d/1d0wp7C83YjImeQmL5_CIo1qMRjPd_-8a/view?usp=sharing) |
+|  SegMAN-S  |     SegMAN Encoder-S  | 51.3  | 29.4M | 25.3G | [config](segmentation\local_configs\segman\small\segman_s_ade.py)  | [Google Drive](https://drive.google.com/file/d/18OFmbr8rklYXqO93tU9UDYKsmobGFSR6/view?usp=sharing) |
+|  SegMAN-B  |     SegMAN Encoder-B  | 52.6  | 51.8M | 58.1G | [config](segmentation\local_configs\segman\base\segman_b_ade.py)  | [Google Drive](https://drive.google.com/file/d/19C1lpTTqHZZvLdf4SbKcp8SMiIDPQcoO/view?usp=sharing) |
+|  SegMAN-L  |     SegMAN Encoder-L  |  53.2 | 92.6M | 97.1G | [config](segmentation\local_configs\segman\large\segman_l_ade.py)  | [Google Drive](https://drive.google.com/file/d/18OFmbr8rklYXqO93tU9UDYKsmobGFSR6/view?usp=sharing) |
+
+### Cityscapes
+
+|   Model  |    Backbone(ImageNet-1k Top1 Acc)     | mIoU | Params | FLOPs  | Config | Download  |
+|  SegMAN-T  |     SegMAN Encoder-T   | 80.3 | 6.4M | 52.5G | [config](segmentation\local_configs\segman\tiny\segman_t_cityscapes.py)  | [Google Drive](https://drive.google.com/file/d/1GivXciIZ7hdDsY0IDvV-v1dejGCK2VLX/view?usp=sharing) |
+|  SegMAN-S  |     SegMAN Encoder-S  | 83.2  | 29.4M | 218.4G | [config](segmentation\local_configs\segman\small\segman_s_cityscapes.py)  | [Google Drive](https://drive.google.com/file/d/1VOpcMY9rTiHcx13nkFYLlX6llxAAZTEK/view?usp=sharing) |
+|  SegMAN-B  |     SegMAN Encoder-B  | 83.8  | 51.8M | 479.0G | [config](segmentation\local_configs\segman\base\segman_b_cityscapes.py)  | [Google Drive](https://drive.google.com/file/d/1k34JM9WVBYBIcCv8FOKvDUAHPDhjj00t/view?usp=sharing) |
+|  SegMAN-L  |     SegMAN Encoder-L  |  84.2 | 92.6M | 769.0G | [config](segmentation\local_configs\segman\large\segman_l_cityscapes.py)  | [Google Drive](https://drive.google.com/file/d/1SPaXL-faXlZyEPXl5bILLMlHG0OaFo1j/view?usp=sharing) |
+
+### COCO-Stuff
+
+|   Model  |    Backbone(ImageNet-1k Top1 Acc)     | mIoU | Params | FLOPs  | Config | Download  |
+|  SegMAN-T  |     SegMAN Encoder-T   | 41.3 | 6.4M | 6.2G | [config](segmentation\local_configs\segman\tiny\segman_t_coco.py)  | [Google Drive](https://drive.google.com/file/d/18P-e5hxWkISfiDZRnNTMow2-Fphk4H4t/view?usp=sharing) |
+|  SegMAN-S  |     SegMAN Encoder-S  | 47.5  | 29.4M | 25.3G | [config](segmentation\local_configs\segman\small\segman_s_coco.py)  | [Google Drive](https://drive.google.com/file/d/1LEa7PSs9H1yovjFp0Ylu-izqbje0LDDf/view?usp=sharing) |
+|  SegMAN-B  |     SegMAN Encoder-B  | 48.4  | 51.8M | 58.1G | [config](segmentation\local_configs\segman\base\segman_b_coco.py)  | [Google Drive](https://drive.google.com/file/d/1NHnNSBMQOw3y4FzjS66XcBrf-v5BpM0b/view?usp=sharing) |
+|  SegMAN-L  |     SegMAN Encoder-L  |  48.8 | 92.6M | 97.1G | [config](segmentation\local_configs\segman\large\segman_l_coco.py)  | [Google Drive](https://drive.google.com/file/d/18kVKvgZwESK-oixRpOjByg-97TWt8AA7/view?usp=sharing) |
 
 
 ## Encoder Pre-training

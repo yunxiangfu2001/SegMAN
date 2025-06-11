@@ -339,9 +339,6 @@ class VSSM(nn.Module):
         d_inner = int(expansion_ratio * d_model)
         dt_rank = math.ceil(d_model / 16) if dt_rank == "auto" else dt_rank
 
-        # # # out proj =======================================
-        # self.out_norm = norm_layer(d_inner)
-
         self.expansion_ratio = expansion_ratio
         self.ssm_split = ssm_split
         if self.ssm_split:
@@ -373,8 +370,6 @@ class VSSM(nn.Module):
         self.A_logs = self.A_log_init(d_state, d_inner, copies=k_groups, merge=True) # (K * D, N)
         self.Ds = self.D_init(d_inner, copies=k_groups, merge=True) # (K * D)
         
-        # self.factor1 = nn.Parameter(torch.ones(d_inner, 1, 1), requires_grad=True)
-        # self.factor2 = nn.Parameter(torch.ones(d_inner, 1, 1), requires_grad=True)
             
     @staticmethod
     def dt_init(dt_rank, d_inner, dt_scale=1.0, dt_init="random", dt_min=0.001, dt_max=0.1, dt_init_floor=1e-4, **factory_kwargs):
@@ -459,8 +454,6 @@ class VSSM(nn.Module):
         K, D, R = dt_projs_weight.shape
         L = H * W
         
-        # xs = torch.stack([x, x.flip([-1])], dim=1).reshape(B, -1, L)
-        # xs = self._cross_scan(x).reshape(B, -1, L)
         if self.expansion_ratio != 1.0:
             x = self.proj(x.permute(0,2,3,1).contiguous()).permute(0,3,1,2).contiguous()
             xs, paths_lr, paths_tb, reverse_lr, reverse_tb = self._cross_scan(x) # size b, 4, embed_dim, L
@@ -490,10 +483,6 @@ class VSSM(nn.Module):
                                   delta_softplus=True,
                                   ssoflex=True)
         
-        # y = ys.reshape(B, K, -1, L)
-        # yf = F.conv1d(y[:, 0, ...], weight=self.factor1, groups=D)
-        # yb = F.conv1d(y[:, 1, ...].flip([-1]), weight=self.factor2, groups=D)
-        # y = yf + yb
         y = self._cross_merge(ys.reshape(B, K, -1, H, W).contiguous(), paths_lr, paths_tb, reverse_lr, reverse_tb).reshape(B, -1, L).contiguous()
 
         if self.ssm_split:
@@ -713,12 +702,7 @@ class Block(nn.Module):
         x = x + self.cpe1(x)
         x = x + self.drop_path(self.layer_scale1(self.token_mixer(self.norm1(x), pos_enc)))
         x = x + self.cpe2(x)
-        x = x + self.drop_path(self.layer_scale2(self.mlp(self.norm2(x))))
-        
-        # x = self.layer_scale1(x + self.cpe1(x))
-        # x = x + self.drop_path(self.layer_scale1(self.token_mixer(self.norm1(x), pos_enc)))
-        # x = self.layer_scale2(x + self.cpe2(x))
-        # x = x + self.drop_path(self.layer_scale2(self.mlp(self.norm2(x))))  
+        x = x + self.drop_path(self.layer_scale2(self.mlp(self.norm2(x))))  
             
         return x
     
@@ -1016,14 +1000,6 @@ class SegMANEncoder(nn.Module):
         if isinstance(self.pretrained, str):
             logger = get_root_logger()
             checkpoint = torch.load(self.pretrained, map_location='cpu')
-            # if 'ema' in self.pretrained:
-            #     state_dict_name = 'state_dict_ema'
-            # else:
-            #     state_dict_name = 'state_dict'
-            #     # load_checkpoint(self, self.pretrained, map_location='cpu', strict=False, logger=logger)
-            # state_dict = checkpoint[state_dict_name]
-            # self.load_state_dict(state_dict, strict=False)
-            # logger.info(f"loaded state dict using {state_dict_name} from {self.pretrained}")
             try:
                 state_dict = checkpoint['state_dict_ema']
                 state_dict_name = 'state_dict_ema'
@@ -1068,7 +1044,6 @@ class SegMANEncoder(nn.Module):
             "prim::PythonOp.SelectiveScanNRow": selective_scan_flop_jit,
             "prim::PythonOp.NeighborhoodAttention2DQKAutogradFunction": qk_2d_rpb_flop,
             "prim::PythonOp.NeighborhoodAttention2DAVAutogradFunction": av_2d_flop,
-            # "prim::PythonOp.FusedNeighborhoodAttention2D": fna_generic_flops,
         }
 
         model = copy.deepcopy(self)
@@ -1107,8 +1082,6 @@ def _cfg(url=None, **kwargs):
         **kwargs,
     }
 
-
-# segformer embeds 2, 2.5, 1.6
 
 @BACKBONES.register_module()
 def SegMANEncoder_t(pretrained=None, pretrained_cfg=None, **args):
@@ -1163,7 +1136,24 @@ def SegMANEncoder_b(pretrained=None, pretrained_cfg=None, **args):
         **args,
     )
     model.default_cfg = _cfg(crop_pct=0.95)
-    '''
-    45M
-    '''
+    return model
+
+
+@BACKBONES.register_module()
+def SegMANEncoder_l(pretrained=None, pretrained_cfg=None, **args):
+    model = SegMANEncoder(
+        embed_dims=[96, 192, 432, 640],
+        depths=[4, 4, 28, 4],
+        num_heads=[4, 8, 12, 20],
+        window_size=[11, 9, 7, 7],
+        window_dilation=[1, 1, 1, 1],
+        mlp_ratios=[4, 4, 3, 3],
+        layerscales=[True, True, True, True],
+        layer_init_values=1e-6,
+        use_rpb=True,
+        pretrained=pretrained,
+        norm_layer=LayerNorm2d,
+        **args,
+    )
+    model.default_cfg = _cfg(crop_pct=0.95)
     return model
