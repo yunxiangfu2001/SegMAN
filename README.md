@@ -122,6 +122,19 @@ We provide scripts for pre-training the encoder from scratch.
 bash scripts/train_segman-s.sh
 ``` 
 
+## Visualization
+You can visualize segmentation results using pre-trained checkpoints with the following (under segmentation directory):
+```
+python image_demo.py \
+img_path \
+config_file \
+checkpoint_file \
+--palette 'ade20k' \
+--out-file segman_demo.png \
+--device 'cuda:0'
+```
+Replace ```img_path```, ```config_file```, and ```checkpoint_file``` with the image and model you want to visualize. Select a ```palette``` from {ade20k, coco_stuff164k, cityscapes}
+
 
 ## Acknowledgements
 
