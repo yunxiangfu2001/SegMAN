@@ -29,7 +29,7 @@ cd segmentation
 pip install -v -e .
 ```
 
-To support torch>=2.1.0, you also need to ```from packaging import version``` and replace ```Line 75``` of ```/miniconda3/envs/segman/lib/python3.10/site-packages/mmcv/parallel/_functions.py``` with the following:
+To support torch>=2.1.0, you also need to import ```from packaging import version``` and replace ```Line 75``` of ```/miniconda3/envs/segman/lib/python3.10/site-packages/mmcv/parallel/_functions.py``` with the following:
 ```
 if version.parse(torch.__version__) >= version.parse('2.1.0'):
     streams = [_get_stream(torch.device("cuda", device)) for device in target_gpus]
