@@ -10,8 +10,8 @@ norm_cfg = dict(type='SyncBN', requires_grad=True)
 model = dict(
     type='EncoderDecoder',
     backbone=dict(
-        type='SegMANEncoder_b',
-        pretrained='/path/to/SegMAN_Encoder_b.pth.tar',
+        type='SegMANEncoder_l',
+        pretrained='/path/to/SegMAN_Encoder_l.pth.tar',
         style='pytorch'),
     decode_head=dict(
         type='SegMANDecoder', 
