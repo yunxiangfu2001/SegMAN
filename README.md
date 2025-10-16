@@ -133,7 +133,7 @@ checkpoint_file \
 --out-file segman_demo.png \
 --device 'cuda:0'
 ```
-Replace ```img_path```, ```config_file```, and ```checkpoint_file``` with the image and model you want to visualize. Select a ```palette``` from {ade20k, coco_stuff164k, cityscapes}
+Replace ```img_path```, ```config_file```, and ```checkpoint_file``` with the image and model you want to visualize. Select a ```palette``` from {ade20k, coco_stuff164k, cityscapes} that correspond to the dataset you want to visualize.
 
 
 ## Acknowledgements
