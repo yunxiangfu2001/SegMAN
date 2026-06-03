@@ -1157,3 +1157,22 @@ def SegMANEncoder_l(pretrained=None, pretrained_cfg=None, **args):
     )
     model.default_cfg = _cfg(crop_pct=0.95)
     return model
+
+@BACKBONES.register_module()
+def SegMANEncoder_l2(pretrained=None, pretrained_cfg=None, **args):
+    model = SSViT(
+        embed_dims=[96, 192, 448, 640],
+        depths=[4, 4, 26, 4],
+        num_heads=[4, 8, 14, 20],
+        window_size=[11, 9, 7, 7],
+        window_dilation=[1, 1, 1, 1],
+        mlp_ratios=[4, 4, 3, 3],
+        layerscales=[True, True, True, True],
+        layer_init_values=1e-6,
+        pretrained=pretrained,
+        use_rpb=True,
+        norm_layer=LayerNorm2d,
+        **args,
+    )
+    model.default_cfg = _cfg(crop_pct=0.95)
+    return model
